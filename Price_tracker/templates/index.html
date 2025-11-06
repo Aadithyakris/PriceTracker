@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Price Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        h1, h2 { color: #333; }
+        .product { border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 10px; }
+        .product-name { font-weight: bold; }
+        .product-price { color: #007bff; }
+        /* --- New Styles for the form --- */
+        form { margin-bottom: 20px; padding: 15px; border: 1px solid #007bff; border-radius: 5px; }
+        form div { margin-bottom: 10px; }
+        form label { display: inline-block; width: 100px; }
+        form input { padding: 5px; width: 300px; }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Your Price Tracker</h1>
+
+    <h2>Add New Product</h2>
+    <form method="POST">
+        <div>
+            <label for="name">Product Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="url">Product URL:</label>
+            <input type="url" id="url" name="url" required>
+        </div>
+        <div>
+            <label for="target_price">Target Price:</label>
+            <input type="number" step="0.01" id="target_price" name="target_price" required>
+        </div>
+        <button type="submit">Add Product</button>
+    </form>
+    <hr>
+
+    <h2>Tracked Products</h2>
+    <div class="product-list">
+        {% for product in products %}
+            <div class="product">
+                <div class="product-name">{{ product['name'] }}</div>
+                <div>Target Price: <span class="product-price">₹{{ product['target_price'] }}</span></div>
+                <div>URL: <a href="{{ product['url'] }}" target="_blank">{{ product['url'] }}</a></div>
+            </div>
+        {% else %}
+            <p>No products are being tracked yet. Add one!</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

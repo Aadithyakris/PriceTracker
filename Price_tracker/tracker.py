@@ -117,3 +117,21 @@ def check_price_and_alert():
         print(f"Price is still above the target")
     else:
         print("Error retrieving the price")
+
+
+# schedule
+print("Price tracker started. Running first check now...")
+check_price_and_alert()
+
+# Schedule the job to run every 4 hours
+schedule.every(4).hours.do(check_price_and_alert)
+# You could also do:
+# schedule.every().day.at("09:00").do(check_price_and_alert)
+# schedule.every(30).minutes.do(check_price_and_alert)
+
+print("Script is now scheduled to run every 4 hours.")
+
+# This loop keeps the script running forever
+while True:
+    schedule.run_pending()
+    time.sleep(60) # Wait 60 seconds
