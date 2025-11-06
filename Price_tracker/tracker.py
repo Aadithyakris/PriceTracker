@@ -24,7 +24,7 @@ load_dotenv()
 
 #configuration
 URL="https://www.amazon.in/Sony-ILCE-7M3K-Full-Frame-Mirrorless-Interchangeable/dp/B07DPSQRFF/?_encoding=UTF8&ref_=pd_hp_d_atf_ci_mcx_mr_ca_hp_atf_d"
-TARGET_PRICE=130000.0
+TARGET_PRICE=133500.0
 PRICE_SELECTOR_XPATH = '//*[@id="corePrice_feature_div"]//span[contains(@class, "a-price-whole")]'
 
 #get price of product
@@ -102,4 +102,18 @@ def send_email(price):
         #disconnect server
         server.quit()
 
-send_email(999)
+
+#price checking function
+def check_price_and_alert():
+    """ runs price check to decide if the expected price is reached"""
+    print("Running price check")
+    current_price = get_price()
+
+    #check if got price and below our needed price
+    if current_price and current_price <= TARGET_PRICE:
+        print(f"Target price reached(rupees{current_price}) Sending mail")
+        send_email(current_price)
+    elif current_price:
+        print(f"Price is still above the target")
+    else:
+        print("Error retrieving the price")
