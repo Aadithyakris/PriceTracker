@@ -1,4 +1,4 @@
-#import libraries
+#import libraries  
 
 #control browser
 from selenium import webdriver
@@ -17,6 +17,10 @@ import smtplib
 #scheduling script
 import schedule
 import time
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 #configuration
 URL="https://www.amazon.in/Sony-ILCE-7M3K-Full-Frame-Mirrorless-Interchangeable/dp/B07DPSQRFF/?_encoding=UTF8&ref_=pd_hp_d_atf_ci_mcx_mr_ca_hp_atf_d"
@@ -66,4 +70,36 @@ def get_price():
         driver.quit()
         print("Webdriver closed.")
 
-get_price()
+
+# Load email/password from .env file
+SENDER_EMAIL = os.getenv("EMAIL_USER")
+SENDER_PASSWORD = os.getenv("EMAIL_PASS")
+RECEIVER_EMAIL = os.getenv("EMAIL_USER")
+
+#send mail to the reciever mail
+def send_email(price):
+    """ Sends email alert"""
+    try:
+        #connect gmail to smtp server
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+
+        server.login(SENDER_EMAIL, SENDER_PASSWORD)
+
+        #create the mail
+        subject = "Price rate reached"
+        body = f"The price for item is now rupees {price}. Buy at {URL}"
+        message = f"Subject: {subject}\n\n{body}"
+
+        #send mail
+        server.sendmail(SENDER_EMAIL, RECEIVER_EMAIL, message)
+        print("Email sent successfully")
+
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+
+    finally:
+        #disconnect server
+        server.quit()
+
+send_email(999)
